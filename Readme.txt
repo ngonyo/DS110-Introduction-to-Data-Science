@@ -1,1 +1,2 @@
-readme
+This repository contains files from DS110: Introduction to Data Science, inlcuding R files created from topics covered in class lectures, as well as the two group projects.
+Course Description: An experiential overview of current issues and ethics of big data, data mining algorithms, and the applications of different data mining algorithms. Topics include: issues and ethics of datamining, introduction to software packages: R and SAS, introduction to data mining algorithms, and the application of data mining algorithms.
