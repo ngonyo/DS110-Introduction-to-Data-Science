@@ -1,0 +1,67 @@
+---
+title: "Decision Tree"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Decision Tree Classification of Titanic Survival and Iris Species
+
+This is our third classification technique. Descision Tree can handle both quant and qual. data and is capable of classifying both binary and multiclass classification.
+
+```{r}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+
+#Read both Titanic train and test datasets
+
+TTrain=read.table("TitanicTrain.txt", sep="\t", header=T)
+TTest=read.table("TitanicTest.txt", sep="\t", header=T)
+
+#Convert the factor variables
+#Let's convert PClass and Sex into factor variables
+TTrain$Sex=as.factor(TTrain$Sex)
+TTrain$PClass=as.factor(TTrain$PClass)
+TTrain$Survived=as.factor(TTrain$Survived)
+
+TTest$Sex=as.factor(TTest$Sex)
+TTest$PClass=as.factor(TTest$PClass)
+TTest$Survived=as.factor(TTest$Survived)
+summary(TTest)
+
+#Now we are ready for the decision tree classification
+#Let's first install "rpart" and "rpart.plot" packages
+#Remember to load the package
+require(rpart)
+require(rpart.plot)
+
+#Decision tree is eager learner, meaning it creates a model first like in logistic regression, and then uses the model to predict the classes.
+SurviveTree=rpart(Survived~PClass+Age+Sex, method="class", data=TTrain)
+SurviveTree
+summary(SurviveTree)
+
+#Now lets create the colorful tree output from the model
+rpart.plot(SurviveTree, type=4, extra= 2)
+rpart.plot(SurviveTree, type=1, extra= 2)
+rpart.plot(SurviveTree, type=2, extra= 2)
+
+#Now let's do the prediction Test dataset
+DTPredict=predict(SurviveTree, newdata=data.frame(TTest[,3:5]), type="class")
+
+#Next create confusion matrix
+ConfMat=table(ACtual=TTest$Survived, Predicted=DTPredict)
+ConfMat
+Accuracy=(ConfMat[1,1]+ConfMat[2,2])*100/nrow(TTest)
+
+#ROC Curve
+require(pROC)
+ROC.DT=roc(as.numeric(TTest$Survived), as.numeric(DTPredict))
+
+
+ROC.DT
+plot(ROC.DT)
+
+```

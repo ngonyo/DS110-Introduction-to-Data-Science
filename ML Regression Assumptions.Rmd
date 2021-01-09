@@ -1,0 +1,53 @@
+---
+title: "Multiple Linear Regression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+this is a quick review of multiple linear regression model. we want to create a model to estimate the brainsize from headsize, gender, and age.
+First lets check the 5 multiple linear regression assumptions in the brainsize model.
+
+```{r}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+
+#now read new brainsize dataset
+
+BrainNew=read.table("BrainSizeNew.txt", sep="\t", header=T)
+head(BrainNew)
+
+str(BrainNew)
+BrainNew$Gender=as.factor(BrainNew$Gender)
+BrainNew$AgeRange=as.factor(BrainNew$Age)
+
+str(BrainNew)
+
+#Let's create the multiple linear regression model
+MLRModel1=lm(BrainSize~Gender+AgeRange+HeadSize, data=BrainNew)
+summary(MLRModel1)
+
+#Here's how we access to model errors : modelname$residuals
+
+MLRModel1$residuals
+
+#==============================================================
+# CHECKING MODEL ASSUMPTIONS
+#==============================================================
+
+#Assumptions 1: E(e)=0. We are creating a plot of fitted values vs errors
+plot(MLRModel1$fitted.values, MLRModel1$residuals, pch=16);abline(0,0)
+
+#The above residual plot (fittedY vs residuals) is symmetric around x-axis and random and no patterns. So the assumption is satisfied.
+
+#Assumption 2 : V(e) constant for all the different value combinations of the predictor variables
+#we use the same plot above, we can see an *approximate* horizontal band, so assumption 2 is satisfied. 
+
+
+
+
+
+```

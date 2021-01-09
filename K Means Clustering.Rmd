@@ -1,0 +1,143 @@
+---
+title: "K Means Clustering"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+We are going to learn our forst clustering algorithm -- Kemans clustering. KMeans is a prototype based clustering algorithm which uses mean of clusters as their clustering prototype.
+
+ 
+
+Let's apply k-means clustering to PRoteinConsumption dataset.
+
+When performing clustering there are two important questions to answer...
+
+a) how do we cluster the dataset?
+
+b) how can we justify the optimal number of clusters?
+
+ 
+
+```{R}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+
+
+ 
+
+#Read the protein consumption dataset
+
+PC=read.table("ProteinConsumption.txt", sep="\t", header=T)
+head(PC)
+summary(PC)
+
+ 
+
+#Based on the handout, we are going to work one example - part (a) which asks us to perform clustering based on "Meat consumption". Therefore we will focus on meat consumption.
+
+ 
+
+#Now let's seperate only white and red meat data.
+Meat=PC[, 2:3]
+
+ 
+
+#In order to perform clustering, we need to install the 'cluster' package, and load it.
+require(cluster)
+
+
+#Let's set the seed to make sure the starting random points are the same for everyone in class.
+
+set.seed(123456)
+
+ 
+
+#One thing to remember about kmeans clustering is that we need to tell the number of clusters (k) to do the clustering.
+
+#So just to lean how to run keamns() lets use k=3. Leter we will learn how to find the optimal value for k
+
+kmn3=kmeans(Meat, 3)
+kmn3
+
+#Now we are going to learn how to select the optimal number of clusters (k value)
+#We use the total within sum of square values (TWSS). lower TWSS will tell us that observations within a cluster have simular variation ie they are simular. #We will pick the k that gives us a relatively small TWSS value.
+#We can use tot.withins of the kmeans output. that is the total within sum of square values of the entire clustering
+kmn3$tot.withinss
+
+#I'm going to create an array to store TWSS for a range of kvalues and then print it to a plot.
+
+#WE are creating an array of 24 zeroes, 
+#array(value, howmany)
+TWSS=array(0,24)
+for(i in 1:24){
+  kmn=kmeans(Meat, i)
+  TWSS[i]=kmn$tot.withinss
+}
+TWSS
+
+k=1:24
+plot(k, TWSS, type="b", pch=16)
+
+#Based on the plot, we can see that after k value of 4 the decreases in TWSS are insignificant, so we select optimal number of clusters as k=4.
+
+MeatKmn4=kmeans(Meat, 4)
+MeatKmn4
+
+#Now is we will investigate each cluster further ("Post Analysis")
+Meatkmn4$cluster
+
+#Let's first ID the row numbers belonging to each cluster
+Clus1Rows=which(MeatKmn4$cluster==1)
+print("Rows belond to cluster 1: ")
+Clus1Rows
+
+Clus2Rows=which(MeatKmn4$cluster==2)
+print("Rows belond to cluster 2: ")
+Clus2Rows
+
+Clus3Rows=which(MeatKmn4$cluster==3)
+print("Rows belond to cluster 3: ")
+Clus3Rows
+
+Clus4Rows=which(MeatKmn4$cluster==4)
+print("Rows belond to cluster 4: ")
+Clus3Rows
+
+#Now lets separate the original dataset based on cluster
+Cluster1Data=PC[Clus1Rows, ]
+Cluster2Data=PC[Clus2Rows, ]
+Cluster3Data=PC[Clus3Rows, ]
+Cluster4Data=PC[Clus4Rows, ]
+
+#Here's what we have
+Cluster1Data
+Cluster2Data
+Cluster3Data
+Cluster4Data
+
+#Lets investigate what makes them similar and different based on meat consumption
+summary(Cluster1Data)
+summary(Cluster2Data)
+summary(Cluster3Data)
+summary(Cluster4Data)
+
+#In addition we should create ggplots to see the patterns
+require(ggplot2)
+ggplot(Cluster1Data, aes(x=RedMeat, y=WhiteMeat))+geom_point()
+ggplot(Cluster2Data, aes(x=RedMeat, y=WhiteMeat))+geom_point()
+ggplot(Cluster3Data, aes(x=RedMeat, y=WhiteMeat))+geom_point()
+ggplot(Cluster4Data, aes(x=RedMeat, y=WhiteMeat))+geom_point()
+
+#Using the numerical and visual description of each cluster we can identify patterns of what makes the observations in each cluster similar and different.
+
+
+
+
+
+```

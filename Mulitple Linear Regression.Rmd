@@ -1,0 +1,24 @@
+---
+title: "Multiple Linear Regression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+this is a quick review of multiple linear regression model. we want to create a model to estimate the brainsize from headsize, gender, and age
+
+```{r}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+
+
+
+
+
+
+
+
+```

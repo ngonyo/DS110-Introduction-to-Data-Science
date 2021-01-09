@@ -1,0 +1,40 @@
+---
+title: "Wine"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#PCA for wine
+
+```{r}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+
+#Read the wineTrain dataset, note that it is comma seperated
+wine=read.table("WineTrain.txt", sep=",", header=T)
+head(wine)
+
+summary(wine)
+colnames(wine)
+
+#we are ready to apply the pca to reduce the number of variables that can provide the maximum variability in the dataset
+
+winePCA=prcomp(wine, scale=TRUE, center=TRUE)
+
+#we can show different outputs of PCA
+winePCA
+
+#Let's show  the summary of PCA
+summary(winePCA)
+
+#lets create the "screeplot":the plot of number of principal components on the x axis and the variance of each principal component on y-axis
+
+plot(winePCA,type="1",pch=16)
+
+
+
+```

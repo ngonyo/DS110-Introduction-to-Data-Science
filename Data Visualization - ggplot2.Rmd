@@ -1,0 +1,102 @@
+---
+title: "Data Visualization"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+Housing=read.table("HousePrices.txt", sep="\t",header=T)
+head(Housing)
+
+#Lets see the variables and their structures in the dataset
+str(Housing)
+
+Housing$State=as.factor(Housing$State)
+Housing$region=as.factor(Housing$region)
+Housing$Qrtr=as.factor(Housing$Qrtr)
+
+#Let's install ggplot2 package
+#install.packages("ggplot2")
+
+#installation once is enough to use forever, but we need to load the package everytime we need to use it. Let's load the package
+require(ggplot2)
+
+#we are going to generate some visuals for housing dataset. We will use the ggplot() function which creates the basic layer of the plot.
+
+ggplot(Housing, aes(x=Land.Value))
+ggplot(Housing, aes(x=Land.Value))+geom_histogram()
+
+ggplot(Housing, aes(x=Land.Value, y=Home.Value))
+ggplot(Housing, aes(x=Land.Value, y=Home.Value))+geom_point()
+
+#Next learn the use of aesthetics -- aes(). 
+#Let's change the color of the histogram
+ggplot(Housing, aes(x=Land.Value))+geom_histogram(col="green", fill="purple", bins = 25)
+ggplot(Housing, aes(x=Land.Value))+geom_histogram(aes(col=State, fill=State), bins = 30)
+ggplot(Housing)
+#Let me show you how to reuse layers
+L1=ggplot(Housing)
+L1
+L1+geom_histogram(aes(x=Land.Value, col=State, fill=State), bins=30)
+L1
+L1+geom_histogram(aes(x=Land.Value))
+L2=ggplot(Housing, aes(x=Land.Value, y=Home.Value))
+L2
+#L2+geom_histogram()
+#L2+geom_point()
+#L2+geom_line()
+
+#ggplot(Housing, aes(x+Home.Value))+geom_histogram((bins=30)+labs(title="Histogram of Home Value in all States", X="Home Value", y=""))
+
+#Let's use facet wrap
+ggplot(Housing, aes(x=Home.Value))+geom_histogram()
+ggplot(Housing, aes(x=Home.Value))+geom_histogram(bins=30)
+ggplot(Housing, aes(x=Home.Value))+geom_histogram(bins=30)+facet_wrap(~region)
+ggplot(Housing, aes(x=Home.Value))+geom_histogram(bins=30)+facet_wrap(~region, ncol=2)
+ggplot(Housing, aes(x=Home.Value))+geom_histogram(bins=30)+facet_wrap(~region, ncol=3)
+ggplot(Housing, aes(x=Home.Value, col=Qrtr, fill=Qrtr))+geom_histogram(bins=30)+facet_wrap(~region, ncol=2)
+
+ggplot(Housing, aes(x=Home.Value, y=Land.Value, col=Qrtr))+geom_line()+facet_wrap(~region, ncol=3)
+
+#ix. lets create the subset seperately and then use in the ggplot function inplace of the dataset
+MATX=subset(Housing, State %in% c("MA", "TX"))
+#Now im passing the MATX subset in place of the dataset
+#ggplot(MATX, aes(x=Home.Value))+geom_point()
+#ggplot(MATX, aes(x=Home.Value, y=Land.Value))+geom_point(aes(col+state))
+
+#ix. now that you know the subsetting lets put it together in one line
+ggplot(subset(Housing, State %in% c("IN", "IL", "OH")), aes(x=Home.Value, y=Land.Value, col=State))+geom_line()+facet_wrap(~State)
+
+#x, Trends in housing based on data and Home.Value
+p1=ggplot(Housing, aes(x=Date, y=Home.Value))
+p1
+p1+geom_line(aes(col=region))+facet_wrap(~Region)
+
+p1+geom_point(aes(col=State))+facet_wrap(~State)
+p1+geom_point(aes(col=State))
+
+ggplot(subset(Housing, State %in% c("HI", "CA", "DC")), aes(x=Date, y=Home.Value, col=State))+geom_points(size=4, shape=1)
+ggplot(subset(Housing, State %in% c("HI", "CA", "DC")), aes(x=Date, y=Home.Value, col=State))+geom_points(size=1, shape=16)
+#Now lets visualize each of the variables as a simple line chart with respect to eyeDetect. This will give us an idea of how EyeDetect changes as each of the variables increases or decreases.
+#ggplot(EyeDetectTRAIN, aes(x=eyeDetect)) + 
+
+#  geom_line(aes(y = T.), color = "red", linetype="solid") + 
+ # geom_line(aes(y = P7), color="orange", linetype="solid") +
+#  geom_line(aes(y = O1), color="yellow", linetype="solid") +
+#  geom_line(aes(y = FC5), color="green", linetype="solid") +
+ # geom_line(aes(y = F7), color="cyan", linetype="solid") +
+  #geom_line(aes(y = FC6), color="blue", linetype="solid") +
+  #geom_line(aes(y = F8), color="purple", linetype="solid") 
+
+#ggplot(data=EyeDetectTRAIN, aes(y=O1,x=T.,col=eyeDetect))+geom_smooth() + ggtitle("Plot of length by dose") +
+#  xlab("Dose (mg)") + ylab("Teeth length")
+#ggplot(data=EyeDetectTRAIN, aes(y=P7,x=T.,col=eyeDetect))+geom_smooth() + ggtitle("Plot of length by dose") +
+#  xlab("Dose (mg)") + ylab("Teeth length")
+
+```

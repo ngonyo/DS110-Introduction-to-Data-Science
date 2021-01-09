@@ -1,0 +1,42 @@
+---
+title: "Correlation Measurements"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{R}
+
+#lets learn some ways of calculatng correlation.
+X=c(1,2,3,4,5,6)
+X
+
+Y=c(2,3,4,6,8,10)
+Y
+
+#Lets plot x and y and see how they fit into a line, this will give a basic idea of how they are correlated (or not)
+plot(X,Y, pch=16)
+
+#Let's compute the linear correlation coefficient
+cor(X,Y)
+
+
+#Distance between two numbers. lets use same x and y.
+dist(cbind(X,Y))
+
+#Let's manually compute the euclidean distance
+L2=sqrt(sum((X-Y)^2))
+L2
+```
+
+```{R}
+#Class exercise
+X=c(0,2,3)
+y=c(2,0,1)
+sqrt(sum((X-Y)^2))
+
+#L1norm for the class exercise
+sum(abs(X-Y))
+```

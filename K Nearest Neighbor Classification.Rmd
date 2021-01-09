@@ -1,0 +1,79 @@
+---
+title: "K Nearest Neighbor Classification"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#KNN classification
+This is the second classification technque we are learning in the class. KNN can be used for quantitative data, because it needs to compute distances.
+
+Here we will be applying knn to "Iris" dataset, which will be a 3 class classification problem. we will be classifying each obvservation into one of 3 plant species.
+
+```{r}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+
+#read the iris train and test datasets, convert to factor as needed
+IrisTrain=read.table("IrisTrain.txt", sep="\t", header=T)
+IrisTest=read.table("IrisTest.txt", sep="\t", header=T)
+
+head(IrisTrain)
+IrisTrain$Species=as.factor(IrisTrain$Species)
+str(IrisTrain)
+
+head(IrisTest)
+IrisTest$Species=as.factor(IrisTest$Species)
+str(IrisTest)
+
+#We are classifying each observation into one of 3 species.
+
+#KNN function is in the package "class". lets install and load the class package now.
+require(class)
+
+#We need to ID how many neighbors we need to look at to classify each observation, that value is the k in the function.
+#one method is using the square root of the number of rows in the train dataset. this is just the starting value. once you have ID the starting value modify it to a few lower and higher and pick the k that gives the best classification.
+
+k=sqrt(nrow(IrisTrain))
+k
+
+#the square root of the num of rows in IRISTrain (120) is 10.95, so lets start at a value of 11 for k. 
+#note knn is a lazy model. process is picking value from test, finding neighbors with train and then classifying species.
+IrisKNN11=knn(IrisTrain[, 1:4 ], IrisTest[,1:4 ], IrisTrain$Species, k=11)
+IrisKNN11
+
+#Create the confusion matrix
+ConfMat=table(Actual=IrisTest$Species, Predicted=IrisKNN11)
+ConfMat
+Accuracy=((ConfMat[1,1]+ConfMat[2,2]+ConfMat[3,3])*100/nrow(IrisTest))
+print(paste("Accuracy of k = ", 11, "is : ", round(Accuracy, 2)))
+
+
+##########################################################
+#Let's learn how to write a for loop in R
+##########################################################
+
+#For example let's write a for-loop to print 1 to 10.
+for(i in 1:10){
+  print(i)
+}
+
+#Now let's run the code for knn changing k from 7 to 20
+for(k in 5:20){
+  IrisKNN11=knn(IrisTrain[, 1:4 ], IrisTest[,1:4 ], IrisTrain$Species, k)
+  IrisKNN11
+  #Create the confusion matrix
+  ConfMat=table(Actual=IrisTest$Species, Predicted =IrisKNN11)
+  #ConfMat
+  Accuracy=((ConfMat[1,1]+ConfMat[2,2]+ConfMat[3,3])*100/nrow(IrisTest))
+  print(paste("Accuracy of k = ", k, "is : ", round(Accuracy, 2)))
+  
+
+}
+
+#According to the above output, k=6,7, 9:13 give the best performance. So we could pick one of those values and run kNN to be our model classification.
+#So, here's our final best kNN model output with k=11
+```

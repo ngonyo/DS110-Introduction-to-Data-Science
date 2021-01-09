@@ -1,0 +1,82 @@
+---
+title: "Multiple ROC Curves on One Plot"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+#################LOgistic Regression Model###################
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+dir()
+
+#read the titanic train and test datasets
+TTrain=read.table("TitanicTrain.txt", sep="\t", header=T)
+TTest=read.table("TitanicTest.txt", sep="\t", header=T)
+
+head(TTrain)
+
+summary(TTrain)
+
+#Let's convert PClass and Sex into factor variables
+TTrain$Sex=as.factor(TTrain$Sex)
+TTrain$PClass=as.factor(TTrain$PClass)
+TTrain$Survived=as.factor(TTrain$Survived)
+
+summary(TTrain)
+
+#We are ready to apply the logistic regression model
+#WE will be using the function glm(), the same way we used lm() function to create multiple linear regression model with an extra item to denote the distribution family of the response variable(family=binomial)
+
+LRSurvived=glm(Survived~PClass+Age+Sex,data=TTrain, family = binomial)
+summary(LRSurvived)
+
+Ex1=predict(LRSurvived, newdata=data.frame(PClass="2nd", Age=40, Sex= "male"),type="response")
+Ex1
+
+Ex2=predict(LRSurvived, newdata=data.frame(PClass="1st", Age=25, Sex= "female"),type="response")
+Ex2
+
+#Now we are using the TTest test dataset to check the prediction and then later on to check the prediction accuracy
+#First convert factor variables in the test dataset
+TTest$Sex=as.factor(TTest$Sex)
+TTest$PClass=as.factor(TTest$PClass)
+TTest$Survived=as.factor(TTest$Survived)
+
+#Now we are ready to predict
+LRSurvivalPrediction=predict(LRSurvived, newdata=data.frame(TTest[, 3:5]), type="response")
+LRSurvivalPredictionRounded=round(LRSurvivalPrediction)
+
+require(pROC)
+
+ROC.LR=roc(TTest$Survived, LRSurvivalPredictionRounded)
+ROC.LR
+
+#################Decision Tree Model###################
+require(rpart)
+require(rpart.plot)
+
+SurviveTree=rpart(Survived~PClass+Age+Sex, method="class", data=TTrain)
+
+#Now let's do the prediction Test dataset
+DTPredict=predict(SurviveTree, newdata=data.frame(TTest[,3:5]), type="class")
+
+
+#ROC Curve
+require(pROC)
+ROC.DT=roc(as.numeric(TTest$Survived), as.numeric(DTPredict))
+
+#################Now Combining ROC Curves on One Plot######################
+#Note we ony need one plot() function followed by number of lines() commands to each additional ROC curve
+plot(ROC.LR, col="purple");lines(ROC.DT, col="blue");legend("topleft", legend=c("LogReg", "DecisionTree"), col=c("Purple", "Blue"), pch=c(17,16))
+#We can see the LR ROC Curve 
+
+#In your case you have KNN output as well. Here's the code:
+#plot
+
+```

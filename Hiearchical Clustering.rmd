@@ -1,0 +1,105 @@
+---
+title: "Hiearchical Clustering"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+We are going to apply hierachical clustering to the protein consumption dataset. we are going to look at our questions part (b) where we would like to identify the natiral grouping structure of the cvountries based on the entire protein consumpotion.
+
+Therefore we will be using all the information about proteins.
+
+```{r}
+#set the working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+
+#Read the protein consumption dataset
+
+PC=read.table("ProteinConsumption.txt", sep="\t", header=T)
+head(PC)
+summary(PC)
+
+#All variables are quantitative except the variable "country". The countr variable is only an identifier so we can ignore it duirng the clustering. We will use it at the end for the post analysis.
+
+NewPC=PC[ ,-1]
+head(NewPC)
+
+
+#We will be using the package "cluster"
+#The cluster package has the function hclust() which implements Aggolomerative Hierarchical clustering.
+#Note that we will be passing the histance matrix of the obervations to the hclust() function. Not the original observations.
+
+#We already installed and used the cluster packahge last time so let's load it. 
+require(cluster)
+HClustPC=hclust(dist(NewPC))
+HClustPC
+
+#Lets plot the dendogram the clustering output
+#We will include the country names
+plot(HClustPC, labels = PC$Country)
+
+#In the dendogram above we can see there is  set of clear tall branches between 20 and 40. When we look further we can see that the right branches between 30-40 is taller than the right branch between 20-30. Therefore we will be "cutting the tree" accross 30-40 height. That gives us 2 clusters.
+
+#Next is to cut the tree at 2, as in cut the tree with 2 branches. This refers to cutting the tree accross a height of 30-40, as stated above.
+
+#for this we will use the cuttree() function. Pass the hierarhical clustering output and then specify which number of branches you need to cut with.
+
+PCCut2=cutree(HClustPC, 2)
+PCCut2
+
+#Now we are repeating what we did for kmeans clustering. We are separating the dataset by the clusters and performing Post Analysis.
+
+cl1=which(PCCut2==1)
+cl1
+cl2=which(PCCut2==2)
+cl2
+
+Cluster1=PC[cl1, ]
+Cluster2=PC[cl2, ]
+
+
+print("Displaying the summary of cluster 1 data")
+summary(Cluster1)
+nrow(Cluster1)
+
+print("Displaying the summary of cluster 2 data")
+summary(Cluster2)
+nrow(Cluster2)
+
+
+#Here's an exam of using rep function
+rep(1,4)
+rep("a", 4)
+#Now i'm going to create a new variable called "cluster" and label it with "1" for all the rows in cluster1 dataset
+Cluster1$cluster=rep(1,22)
+#Now repeat for cluster 2, labeling as 2
+Cluster2$cluster=rep(2,3)
+summary(Cluster2)
+
+#Now its easy to regenerate original dataset from the above two including the new column "cluster"
+AllData=rbind(Cluster1, Cluster2)
+summary(AllData)
+
+str(AllData)
+#We need to change the cluster variable intoo a factor variable
+AllData$cluster=as.factor(AllData$cluster)
+str(AllData)
+summary(AllData)
+
+#Now its easy to egenrate plots for data visualization in the post analysis
+require(ggplot2)
+ggplot(data=AllData, aes(x=RedMeat, y=WhiteMeat, color=cluster))+geom_point()
+
+
+  
+#We will continue to investigate the observations in each cluster to ifind ouyt any interesting patterns. need to use both graphical and numerical analysis.
+
+
+
+
+
+```
