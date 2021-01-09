@@ -1,0 +1,280 @@
+---
+title: "DS110Project2SampleandPreprocessing"
+author: "Elliot Schendel"
+date: "11/4/2020"
+output: word_document
+---
+
+Step 1: Creating 2000 Sample Dataset
+```{r}
+#set working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+
+#read Project 2 dataset
+FBdataset=read.table("FBOnlineSalesData.txt", sep = "\t", header = T)
+head(FBdataset)
+dim(FBdataset)
+summary(FBdataset)
+
+#create new dataset with 2000 random values from 'FBdataset' (some of the values might be missing values)
+rnd=sample(1:7050, 2000, replace = F)
+FB2000=FBdataset[rnd, ]
+dim(FB2000)
+write.table(FB2000,"FB2000.txt",sep = "\t", row.names = FALSE, col.names = TRUE)
+
+```
+
+Step 2: Preprocessing: Check and remove rows that have missing records
+```{r}
+#set working directory
+setwd("C:/Users/17654/Desktop/DS110Folder/DS110- Project 2 - Classification")
+
+#Read FB2000 dataset
+fb2000=read.table("FB2000.txt", sep = "\t", header = T)
+head(fb2000)
+dim(fb2000)
+#summary(fb2000)
+
+#Dropping rows with missing values
+fb2000_na=is.na(fb2000)
+which(fb2000_na==TRUE)
+
+#Note: No records with missing values were found in the above procedure
+
+```
+
+Step 3: Separating 'date' and 'time' from 'status_published', change 
+```{r}
+#set working directory
+setwd("C:/Users/17654/Desktop/DS110Folder/DS110- Project 2 - Classification")
+
+#Read FB2000 dataset
+fb2000=read.table("FB2000.txt", sep = "\t", header = T)
+attach(fb2000)
+head(fb2000)
+dim(fb2000)
+
+#strsplit -> for separating values in a given variable
+#status_date=strsplit(status_published, " ") [[1]][1] status_date
+
+DT=read.table(text=status_published, sep = " ", header = F)
+head(DT)
+status_date=DT$V1
+status_time=DT$V2
+
+#Add the columns into the dataset, save the dataset in a new name
+newfbdatatable=cbind(fb2000, status_date, status_time)
+
+#write new table
+write.table(newfbdatatable,"newfbdatatable.txt", sep = "\t", row.names = F, col.names = T)
+
+#change 'status_type' into numerical variable (changing photo to 1, video to 2, etc.)
+newfbdatatable$status_type=as.factor(newfbdatatable$status_type)
+levels(newfbdatatable$status_type)
+
+newfbdatatable$status_type=factor(newfbdatatable$status_type, levels = c("link",  "photo",  "status", "video" ),labels = c("1", "2", "3", "4"))
+levels(newfbdatatable$status_type)
+
+newfbdatatable$status_type=as.numeric(newfbdatatable$status_type)
+attach(newfbdatatable)
+
+str(newfbdatatable)
+
+
+newfbdatatable$status_date=as.numeric(as.factor(newfbdatatable$status_date))
+newfbdatatable$status_time=as.numeric(as.factor(newfbdatatable$status_time))
+
+attach(newfbdatatable)
+str(newfbdatatable)
+
+head(newfbdatatable)
+#write new table
+write.table(newfbdatatable,"newfbdatatable2.txt", sep = "\t", row.names = F, col.names = T)
+summary(newfbdatatable)
+
+
+```
+
+
+Step 4: Outlier Analysis: 'Look at outliers and have a discussion about them
+```{r}
+#set working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+
+fbnew2=read.table("newfbdatatable2.txt", sep = "\t", header = T)
+attach(fbnew2)
+summary(fbnew2)
+
+#identify outliers present
+boxplot(fbnew2[,-2])$out
+boxplot(fbnew2$num_comments)$out
+outliercomments=boxplot(fbnew2$num_comments)$out
+outlierrows=which(fbnew2$num_comments%in%outliercomments)
+#the above output shows the records which contain outliers w/ respect to any one of the variables
+outlierdata=fbnew2[outlierrows, ]
+summary(outlierdata)
+
+
+#boxplot(fbnew2$num_reactions)$out #212 outliers exist for num_reactions
+
+
+#boxplot(fbnew2$num_comments)$out
+
+```
+Step 5: Numerical and Visual Descriptions of Variables
+
+```{r}
+head(fbnew2)
+str(fbnew2)
+
+#After we completed analyzing the presence of outliers in the data, we were done with the majority of preprocessing before moving on to performing cluster analysis. Before that however, we need to describe the variables of the dataset both numericaly/statisticaly, as well as visually. It is important to note that because we were instructed not to remove the outliers we found, they would remain in this portion of the preprocessing, which would effect the way the variables are distributed.To start with the data description, we Provided Numerical Summaries of each of the Variables to get an idea of how they are distributed, including mean, max, median, etc.
+
+#num_reactions
+summary(num_reactions)
+
+#num_comments
+summary(num_comments)
+
+#num_shares
+summary(num_shares)
+
+#num_likes
+summary(num_likes)
+
+#num_loves
+summary(num_loves)
+
+#num_wows
+summary(num_wows)
+
+#num_hahas
+summary(num_hahas)
+
+#num_sads
+summary(num_sads)
+
+#num_angrys
+summary(num_angrys)
+
+#status_date
+summary(status_date)
+
+#status_time
+summary(status_time)
+
+#status_type
+summary(status_type)
+table(status_type)
+
+#After we completed the numerical descriptions of each of the variables, we moved on to visualizing the data. To start with data visualization, we visualized each of the Variables through a simple histogram in order to get an idea of how they are distributed. After this we will provide multivariate plots to compare variables, especially focusing on how each of the variables were affected by the form of post / type.
+
+#In order to visualize the data, we need to first require ggplot2
+require(ggplot2)
+
+#Before we start, lets convert status_type to a factor variable to make it easier to use within the data visualization.
+#summary(status_type)
+#fbnew2$status_type=as.factor(fbnew2$status_type)
+summary(status_type)
+
+
+#num_reactions
+ggplot(fbnew2, aes(x=num_reactions))+geom_histogram(col="white", fill="red", bins = 25) + ggtitle("Distribution of Number of Reactions")
+
+#num_comments
+ggplot(fbnew2, aes(x=num_comments))+geom_histogram(col="white", fill="orange", bins = 25) + ggtitle("Distribution of Number of Comments")
+
+#num_shares
+ggplot(fbnew2, aes(x=num_shares))+geom_histogram(col="white", fill="yellow", bins = 25) + ggtitle("Distribution of Number of Shares")
+
+#num_likes
+ggplot(fbnew2, aes(x=num_likes))+geom_histogram(col="white", fill="green", bins = 25) + ggtitle("Distribution of Number of Likes")
+
+#num_loves
+ggplot(fbnew2, aes(x=num_loves))+geom_histogram(col="white", fill="cyan", bins = 25) + ggtitle("Distribution of Number of Loves")
+
+
+#num_wows
+ggplot(fbnew2, aes(x=num_wows))+geom_histogram(col="white", fill="blue", bins = 25) + ggtitle("Distribution of Number of Wows")
+
+#num_hahas
+ggplot(fbnew2, aes(x=num_hahas))+geom_histogram(col="white", fill="purple", bins = 25) + ggtitle("Distribution of Number of Hahas")
+
+#num_sadss
+ggplot(fbnew2, aes(x=num_sads))+geom_histogram(col="white", fill="pink", bins = 25) + ggtitle("Distribution of Number of Sads")
+
+#num_angrys
+ggplot(fbnew2, aes(x=num_angrys))+geom_histogram(col="white", fill="red", bins = 25) + ggtitle("Distribution of Number of Angrys")
+
+#num_reactions
+#ggplot(data=fbnew2, aes(x=num_reactions, y=num_hahas, fill=status_type))+geom_point() + ggtitle("Distrubition of num_reactions over T.")
+
+#ggplot(data=fbnew2, aes(y=P7,x=T., col=eyeDetect))+geom_point() + ggtitle("Rate of eyeDetect on P7 vs T.") +
+#  xlab("T.") + ylab("P7")
+
+#num_reactions
+ggplot(data=fbnew2, aes(x=num_reactions, fill=status_type))+geom_histogram() + ggtitle("Layered Distribution of Number of Reactions based on Status Type")
+
+#num_reactions
+ggplot(data=fbnew2, aes(x=num_comments, fill=status_type))+geom_histogram() + ggtitle("Layered Distribution of Number of Comments based on Status Type")
+
+#num_reactions
+ggplot(data=fbnew2, aes(x=num_shares, fill=status_type))+geom_histogram() + ggtitle("Layered Distribution of Number of Shares based on Status Type")
+
+#num_reactions
+ggplot(data=fbnew2, aes(x=num_likes, fill=status_type))+geom_histogram() + ggtitle("Layered Distribution of Number of Likes based on Status Type")
+
+ggplot(data=fbnew2, aes(x=num_reactions))+geom_histogram(col="white", fill="blue", bins = 25)+facet_wrap(~status_type) + ggtitle("Distribution of Number of Reactions based on Status Type") +
+  xlim(0, 1000) +ylim(0, 350)
+
+ggplot(data=fbnew2, aes(x=num_comments))+geom_histogram(col="white", fill="purple", bins = 25)+facet_wrap(~status_type) + ggtitle("Distribution of Number of Comments based on Status Type") +
+  xlim(0, 2900) +ylim(0, 100)
+
+ggplot(data=fbnew2, aes(x=num_shares))+geom_histogram(col="white", fill="purple", bins = 25)+facet_wrap(~status_type) + ggtitle("Distribution of Number of Shares based on Status Type") +
+  xlim(0, 700) +ylim(0, 60)
+
+
+ggplot(data=fbnew2, aes(x=num_likes))+geom_histogram(col="white", fill="green", bins = 25)+facet_wrap(~status_type) + ggtitle("Distribution of Number of Likes based on Status Type") +
+  xlim(0, 1000) +ylim(0, 350)
+
+#P7 vs T.
+ggplot(data=fbnew2, aes(y=num_shares,x=num_likes, col=status_type))+geom_point() + ggtitle("Rate of Commenting & Sharing based on Status Type") +
+  xlab("num_comments") + ylab("num_shares")
+
+#P7 vs T.
+ggplot(data=fbnew2, aes(y=num_loves,x=num_likes, col=status_type))+geom_point() + ggtitle("Rate of Likes & Loves based on Status Type") +
+  xlab("num_likes") + ylab("num_loves")
+
+```
+
+```{R}
+#set working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+
+KMeansClusteredData=read.table("KMeansClusteredData.txt", sep="\t",header=T)
+head(KMeansClusteredData)
+summary(KMeansClusteredData)
+#Lets see the variables and their structures in the dataset
+str(KMeansClusteredData)
+as.numeric(Cluster)
+table(Cluster)
+
+summary(KMeansClusteredData)
+KMeansClusteredData$Cluster=as.factor(KMeansClusteredData$Cluster)
+summary(KMeansClusteredData)
+table(Cluster)
+
+#P7 vs T.
+ggplot(data=fbnew2, aes(y=num_shares,x=num_likes, col=Cluster))+geom_point() + ggtitle("Rate of Commenting & Sharing based on Status Type") +
+  xlab("num_comments") + ylab("num_shares")
+
+#P7 vs T.
+ggplot(data=fbnew2, aes(y=num_loves,x=num_likes, col=status_type))+geom_point() + ggtitle("Rate of Likes & Loves based on Status Type") +
+  xlab("num_likes") + ylab("num_loves")
+
+
+
+
+
+
+```
+

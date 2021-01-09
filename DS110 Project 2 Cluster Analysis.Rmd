@@ -1,0 +1,106 @@
+---
+title: "DS110Project2ClusterAnalysis"
+author: "Paul Ritter"
+date: "12/2/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+setwd("C:/Users/Pritt/Dropbox/Fall 2020/Intro Data Science/DS110 Project2")
+
+
+FBData <- read.table("newfbdatatable2.txt", sep = "\t", header = TRUE)
+head(FBData)
+summary(FBData)
+
+######################################33
+### K Means Clustering
+########################################3
+
+require(cluster)
+
+TWSS = array(0,50)
+
+FBClust <- FBData[,-2]
+
+kmn3 = kmeans(FBClust,3)
+
+for(i in 1:50) {
+  kmn=kmeans(FBClust, i)
+  TWSS[i]=kmn$tot.withinss
+}
+TWSS
+
+k = 1:50
+plot(k, TWSS, type="b", pch = 16)
+
+# Based on the above plot we can see that after k=5 the drop in TWSS is insignificant so we will use k = 5
+
+FBKmn5 = kmeans(FBClust, 5)
+FBKmn5
+
+Clus1Rows = which(FBKmn5$cluster == 1)
+Clus2Rows = which(FBKmn5$cluster == 2)
+Clus3Rows = which(FBKmn5$cluster == 3)
+Clus4Rows = which(FBKmn5$cluster == 4)
+Clus5Rows = which(FBKmn5$cluster == 5)
+
+Cluster1Data = FBData[Clus1Rows,]
+Cluster2Data = FBData[Clus2Rows,]
+Cluster3Data = FBData[Clus3Rows,]
+Cluster4Data = FBData[Clus4Rows,]
+Cluster5Data = FBData[Clus5Rows,]
+
+summary(Cluster1Data)
+nrow(Cluster1Data)
+
+summary(Cluster2Data)
+nrow(Cluster2Data)
+
+summary(Cluster3Data)
+nrow(Cluster3Data)
+
+summary(Cluster4Data)
+nrow(Cluster4Data)
+
+summary(Cluster5Data)
+nrow(Cluster5Data)
+
+
+####################################################
+### Heirarchal Clustering
+################################################3333
+
+HclustFB = hclust(dist(FBClust))
+HclustFB
+
+plot(HclustFB)
+# when looking at the dendrogram it looks like we should choose 2 clusters
+
+FBCut5 <- cutree(HclustFB, 5)
+FBCut5
+
+FBCut2 <- cutree(HclustFB, 2)
+FBCut2
+
+c11 = which(FBCut2==1)
+c11
+
+c12=which(FBCut2 == 2)
+c12
+
+Cluster1 <- FBData[c11,]
+Cluster2 <- FBData[c12,]
+
+summary(Cluster1)
+nrow(Cluster1)
+
+summary(Cluster2)
+nrow(Cluster2)
+
+```

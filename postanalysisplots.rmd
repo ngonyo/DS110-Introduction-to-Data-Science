@@ -1,0 +1,57 @@
+---
+title: "postanalysisplots.rmd"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+require(ggplot2)
+
+setwd("C:/Users/Nathan/Desktop/DS110")
+
+AllKMeansData1 <- read.table("KMeansClusteredData.txt", sep ="\t", header = T)
+head(AllKMeansData1)
+str(AllKMeansData1)
+summary(AllKMeansData1)
+AllKMeansData1$Cluster=as.factor(AllKMeansData1$Cluster)
+summary(AllKMeansData1)
+
+#num_reactions by cluster
+ggplot(data=AllKMeansData1, aes(x=num_reactions, fill=Cluster))+geom_histogram() + ggtitle("Layered Distrubition of Number of Reactions based on Cluster")
+
+#num_comments by cluster
+ggplot(data=AllKMeansData1, aes(x=num_comments, fill=Cluster))+geom_histogram() + ggtitle("Layered Distrubition of Number of Comments based on Cluster")
+
+#num_shares by cluster
+ggplot(data=AllKMeansData1, aes(x=num_shares, fill=Cluster))+geom_histogram() + ggtitle("Layered Distrubition of Number of Shares based on Cluster")
+
+#num_likes by cluster
+ggplot(data=AllKMeansData1, aes(x=num_likes, fill=Cluster))+geom_histogram() + ggtitle("Layered Distrubition of Number of Likes based on Cluster")
+
+#Comments vs Shares (by Cluster)
+ggplot(data=AllKMeansData1, aes(y=num_shares,x=num_likes, col=Cluster))+geom_point() + ggtitle("Rate of Commenting & Sharing based on Cluster") +
+  xlab("num_comments") + ylab("num_shares")
+
+#Likes vs Loves (by Cluster)
+ggplot(data=AllKMeansData1, aes(y=num_loves,x=num_likes, col=Cluster))+geom_point() + ggtitle("Rate of Likes & Loves based on Cluster") +
+  xlab("num_likes") + ylab("num_loves")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
