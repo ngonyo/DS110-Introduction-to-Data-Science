@@ -1,0 +1,812 @@
+---
+title: "Project1PreProcessing"
+author: "Elliot Schendel"
+date: "10/8/2020"
+output: word_document
+---
+## R Markdown Preprocessing Step 1: Remove Outliers
+
+```{r}
+#set working directory
+setwd("C:/Users/Nathan/Desktop/DS110")
+
+#read Group1EyeData dataset and attach it 
+ProjectData=read.table("Group1EyeData.txt", sep = "\t", header = T)
+attach(ProjectData)
+
+#Dim function to count rows and columns
+dim(ProjectData)
+
+#look at summary...
+summary(ProjectData)
+
+#Making eyeDetect into factor variable
+ProjectData$eyeDetect=as.factor(ProjectData$eyeDetect)
+
+#finding column names
+colnames(ProjectData)
+
+#boxplot to visually see all outliers
+boxplot(ProjectData)$out
+
+######################################
+#Round 1 of Outlier Removal
+######################################
+
+#Identifying AF3 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+af3val=boxplot(ProjectData$AF3)$out
+af3val
+
+rmaf3=which(AF3%in%af3val)
+rmaf3
+
+ProjectData1=ProjectData[-rmaf3,]
+
+boxplot(ProjectData1)
+
+dim(ProjectData)
+dim(ProjectData1)
+
+#Identifying F7 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f7val=boxplot(ProjectData1$F7)$out
+f7val
+
+rmf7=which(ProjectData1$F7%in%f7val)
+rmf7
+
+ProjectData2=ProjectData1[-rmf7,]
+
+boxplot(ProjectData2)
+
+dim(ProjectData1)
+dim(ProjectData2)
+
+#Identifying F3 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f3val=boxplot(ProjectData2$F3)$out
+f3val
+
+rmf3=which(ProjectData2$F3%in%f3val)
+rmf3
+
+ProjectData3=ProjectData2[-rmf3,]
+
+boxplot(ProjectData3)
+
+dim(ProjectData2)
+dim(ProjectData3)
+
+#Identifying FC5 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+fc5val=boxplot(ProjectData3$FC5)$out
+fc5val
+
+rmfc5=which(ProjectData3$FC5%in%fc5val)
+rmfc5
+
+ProjectData4=ProjectData3[-rmfc5,]
+
+boxplot(ProjectData4)
+
+dim(ProjectData3)
+dim(ProjectData4)
+
+#Identifying T. outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+tval=boxplot(ProjectData4$T.)$out
+tval
+
+rmt=which(ProjectData4$T.%in%tval)
+rmt
+
+ProjectData5=ProjectData4[-rmt,]
+
+boxplot(ProjectData5)
+
+dim(ProjectData4)
+dim(ProjectData5)
+
+#Identifying P7 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+p7val=boxplot(ProjectData5$P7)$out
+p7val
+
+rmp7=which(ProjectData5$P7%in%p7val)
+rmp7
+
+ProjectData6=ProjectData5[-rmp7,]
+
+boxplot(ProjectData6)
+
+dim(ProjectData5)
+dim(ProjectData6)
+
+#Identifying O1 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+O1val=boxplot(ProjectData6$O1)$out
+O1val
+
+rmO1=which(ProjectData6$O1%in%O1val)
+rmO1
+
+ProjectData7=ProjectData6[-rmO1,]
+
+boxplot(ProjectData7)
+
+dim(ProjectData6)
+dim(ProjectData7)
+
+#Identifying O2 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+O2val=boxplot(ProjectData7$O2)$out
+O2val
+
+rmO2=which(ProjectData7$O2%in%O2val)
+rmO2
+
+ProjectData8=ProjectData7[-rmO2,]
+
+boxplot(ProjectData8)
+
+dim(ProjectData7)
+dim(ProjectData8)
+
+#Identifying P8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+p8val=boxplot(ProjectData8$P8)$out
+p8val
+
+rmp8=which(ProjectData8$P8%in%p8val)
+rmp8
+
+ProjectData9=ProjectData8[-rmp8,]
+
+boxplot(ProjectData9)
+
+dim(ProjectData8)
+dim(ProjectData9)
+
+#Identifying T8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+t8val=boxplot(ProjectData9$T8)$out
+t8val
+
+rmt8=which(ProjectData9$T8%in%t8val)
+rmt8
+
+ProjectData10=ProjectData9[-rmt8,]
+
+boxplot(ProjectData10)
+
+dim(ProjectData9)
+dim(ProjectData10)
+
+#Identifying FC6 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+fc6val=boxplot(ProjectData10$FC6)$out
+fc6val
+
+rmfc6=which(ProjectData10$FC6%in%fc6val)
+rmfc6
+
+ProjectData11=ProjectData10[-rmfc6,]
+
+boxplot(ProjectData11)
+
+dim(ProjectData10)
+dim(ProjectData11)
+
+#Identifying F4 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f4val=boxplot(ProjectData11$F4)$out
+f4val
+
+rmf4=which(ProjectData11$F4%in%f4val)
+rmf4
+
+ProjectData12=ProjectData11[-rmf4,]
+
+boxplot(ProjectData12)
+
+dim(ProjectData11)
+dim(ProjectData12)
+
+#Identifying F8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f8val=boxplot(ProjectData12$F8)$out
+f8val
+
+rmf8=which(ProjectData12$F8%in%f8val)
+rmf8
+
+ProjectData13=ProjectData12[-rmf8,]
+
+boxplot(ProjectData13)
+
+dim(ProjectData12)
+dim(ProjectData13)
+
+#Identifying AF4 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+af4val=boxplot(ProjectData13$AF4)$out
+af4val
+
+rmaf4=which(ProjectData13$AF4%in%af4val)
+rmaf4
+
+ProjectData14=ProjectData13[-rmaf4,]
+
+boxplot(ProjectData14)
+
+dim(ProjectData13)
+dim(ProjectData14)
+
+
+######################################
+#Round 2 of Outlier Removal
+######################################
+
+
+#Reidentifying AF3 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+AF3val=boxplot(ProjectData14$AF3)$out
+AF3val
+
+rmAF3=which(ProjectData14$AF3%in%AF3val)
+rmAF3
+
+ProjectData15=ProjectData14[-rmAF3,]
+
+boxplot(ProjectData15)
+
+dim(ProjectData14)
+dim(ProjectData15)
+
+#Reidentifying F7 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+F7val=boxplot(ProjectData15$F7)$out
+F7val
+
+rmF7=which(ProjectData15$F7%in%F7val)
+rmF7
+
+ProjectData16=ProjectData15[-rmF7,]
+
+boxplot(ProjectData16)
+
+dim(ProjectData15)
+dim(ProjectData16)
+
+#Reidentifying F3 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+F3val=boxplot(ProjectData16$F3)$out
+F3val
+
+rmF3=which(ProjectData16$F3%in%F3val)
+rmF3
+
+ProjectData17=ProjectData16[-rmF3,]
+
+boxplot(ProjectData17)
+
+dim(ProjectData16)
+dim(ProjectData17)
+
+#Reidentifying FC5 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+FC5val=boxplot(ProjectData16$FC5)$out
+FC5val
+
+rmFC5=which(ProjectData17$FC5%in%FC5val)
+rmFC5
+
+ProjectData18=ProjectData17[-rmFC5,]
+
+boxplot(ProjectData18)
+
+dim(ProjectData17)
+dim(ProjectData18)
+
+#Reidentifying T. outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+T.val=boxplot(ProjectData18$T.)$out
+T.val
+
+rmT.=which(ProjectData18$T.%in%T.val)
+rmT.
+
+ProjectData19=ProjectData18[-rmT.,]
+
+boxplot(ProjectData19)
+
+dim(ProjectData18)
+dim(ProjectData19)
+
+#Reidentifying P7 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+P7val=boxplot(ProjectData19$P7)$out
+P7val
+
+rmP7=which(ProjectData19$P7%in%P7val)
+rmP7
+
+ProjectData20=ProjectData19[-rmP7,]
+
+boxplot(ProjectData20)
+
+dim(ProjectData19)
+dim(ProjectData20)
+
+#Reidentifying 01 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+O1val=boxplot(ProjectData20$O1)$out
+O1val
+
+rmO1=which(ProjectData20$O1%in%O1val)
+rmO1
+
+ProjectData21=ProjectData20[-rmO1,]
+
+boxplot(ProjectData21)
+
+dim(ProjectData20)
+dim(ProjectData21)
+
+#Reidentifying 02 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+O2val=boxplot(ProjectData21$O2)$out
+O2val
+
+rmO2=which(ProjectData21$O2%in%O2val)
+rmO2
+
+ProjectData22=ProjectData21[-rmO2,]
+
+boxplot(ProjectData22)
+
+dim(ProjectData21)
+dim(ProjectData22)
+
+#Reidentifying P8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+P8val=boxplot(ProjectData22$P8)$out
+P8val
+
+rmP8=which(ProjectData22$P8%in%P8val)
+rmP8
+
+ProjectData23=ProjectData22[-rmP8,]
+
+boxplot(ProjectData23)
+
+dim(ProjectData22)
+dim(ProjectData23)
+
+#Reidentifying T8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+T8val=boxplot(ProjectData23$T8)$out
+T8val
+
+rmT8=which(ProjectData23$T8%in%T8val)
+rmT8
+
+ProjectData24=ProjectData23[-rmT8,]
+
+boxplot(ProjectData24)
+
+dim(ProjectData23)
+dim(ProjectData24)
+
+#Reidentifying FC6 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+FC6val=boxplot(ProjectData24$FC6)$out
+FC6val
+
+rmFC6=which(ProjectData24$FC6%in%FC6val)
+rmFC6
+
+ProjectData25=ProjectData24[-rmFC6,]
+
+boxplot(ProjectData25)
+
+dim(ProjectData24)
+dim(ProjectData25)
+
+#Reidentifying F4 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+F4val=boxplot(ProjectData25$F4)$out
+F4val
+
+rmF4=which(ProjectData25$F4%in%F4val)
+rmF4
+
+ProjectData26=ProjectData25[-rmF4,]
+
+boxplot(ProjectData26)
+
+dim(ProjectData25)
+dim(ProjectData26)
+
+#Reidentifying F8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+F8val=boxplot(ProjectData26$F8)$out
+F8val
+
+rmF8=which(ProjectData26$F8%in%F8val)
+rmF8
+
+ProjectData27=ProjectData26[-rmF8,]
+
+boxplot(ProjectData27)
+
+dim(ProjectData26)
+dim(ProjectData27)
+
+#Reidentifying AF4 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+AF4val=boxplot(ProjectData27$AF4)$out
+AF4val
+
+rmAF4=which(ProjectData27$AF4%in%AF4val)
+rmAF4
+
+ProjectData28=ProjectData27[-rmAF4,]
+
+boxplot(ProjectData28)
+
+dim(ProjectData27)
+dim(ProjectData28)
+
+######################################
+#Round 3 of Outlier Removal
+######################################
+
+#Reidentifying AF3 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+af3val2=boxplot(ProjectData28$AF3)$out
+af3val2
+
+rmaf3v2=which(ProjectData28$AF3%in%af3val2)
+rmaf3v2
+
+ProjectData29=ProjectData28[-rmaf3v2,]
+
+boxplot(ProjectData29)
+
+dim(ProjectData28)
+dim(ProjectData29)
+
+#Reidentifying F7 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f7val2=boxplot(ProjectData29$F7)$out
+f7val2
+
+rmf7v2=which(ProjectData29$F7%in%f7val2)
+rmf7v2
+
+ProjectData30=ProjectData29[-rmf7v2,]
+
+boxplot(ProjectData30)
+
+dim(ProjectData29)
+dim(ProjectData30)
+
+#Reidentifying F3 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f3val2=boxplot(ProjectData30$F3)$out
+f3val2
+
+#We have no outliers for 'F3', moving to next variable with visible outliers
+boxplot(ProjectData30)
+#boxplot(ProjectData30$AF3)
+#boxplot(ProjectData30$F7)
+#boxplot(ProjectData30$T.)
+#boxplot(ProjectData30$P7)
+#boxplot(ProjectData30$T8)
+#boxplot(ProjectData30$FC6)
+
+#Reidentifying T. outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+tval2=boxplot(ProjectData30$T.)$out
+tval2
+
+rmtv2=which(ProjectData30$T.%in%tval2)
+rmtv2
+
+ProjectData31=ProjectData30[-rmtv2,]
+
+boxplot(ProjectData31)
+
+#Reidentifying P7 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+p7val2=boxplot(ProjectData31$P7)$out
+p7val2
+
+rmp7v2=which(ProjectData31$P7%in%p7val2)
+rmp7v2
+
+ProjectData32=ProjectData31[-rmp7v2,]
+
+boxplot(ProjectData32)
+
+dim(ProjectData31)
+dim(ProjectData32)
+
+#Reidentifying T8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+t8val2=boxplot(ProjectData32$T8)$out
+t8val2
+
+rmt8v2=which(ProjectData32$T8%in%t8val2)
+rmt8v2
+
+ProjectData33=ProjectData32[-rmt8v2,]
+
+boxplot(ProjectData33)
+
+dim(ProjectData32)
+dim(ProjectData33)
+
+#Reidentifying FC6 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+fc6val2=boxplot(ProjectData33$FC6)$out
+fc6val2
+
+rmfc6v2=which(ProjectData33$FC6%in%fc6val2)
+rmfc6v2
+
+ProjectData34=ProjectData33[-rmfc6v2,]
+
+boxplot(ProjectData34)
+
+dim(ProjectData33)
+dim(ProjectData34)
+
+#Reidentifying AF4 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+af4val2=boxplot(ProjectData34$AF4)$out
+af4val2
+
+rmaf4v2=which(ProjectData34$AF4%in%af4val2)
+rmaf4v2
+
+ProjectData35=ProjectData34[-rmaf4v2,]
+
+boxplot(ProjectData35)
+
+dim(ProjectData34)
+dim(ProjectData35)
+
+#boxplot(ProjectData35$AF3)
+#boxplot(ProjectData35$F7)
+#boxplot(ProjectData35$F8)
+
+######################################
+#Round 4 of Outlier Removal
+######################################
+
+#Reidentifying AF3outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+af3val3=boxplot(ProjectData35$AF3)$out
+af3val3
+
+rmaf3v3=which(ProjectData35$AF3%in%af3val3)
+rmaf3v3
+
+ProjectData36=ProjectData35[-rmaf3v3,]
+
+boxplot(ProjectData36)
+
+#Reidentifying F7 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f7val3=boxplot(ProjectData36$F7)$out
+f7val3
+
+rmf7v3=which(ProjectData36$F7%in%f7val3)
+rmf7v3
+
+ProjectData37=ProjectData36[-rmf7v3,]
+
+boxplot(ProjectData37)
+#boxplot(ProjectData37$O1)
+#boxplot(ProjectData37$F8)
+
+#Reidentifying o1 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+O1val2=boxplot(ProjectData37$O1)$out
+O1val2
+
+rmO1v2=which(ProjectData37$O1%in%O1val2)
+rmO1v2
+
+ProjectData38=ProjectData37[-rmO1v2,]
+
+boxplot(ProjectData38)
+
+#Reidentifying F8 outlier values. Remove the records which have those outliers from the entire dataset to make a new dataset without those outliers. Create a new boxplot to visualize the new dataset and compare dimensions of the old dataset to the new dataset.
+f8val2=boxplot(ProjectData38$F8)$out
+f8val2
+
+rmf8v3=which(ProjectData38$F8%in%f8val2)
+rmf8v3
+
+ProjectData39=ProjectData38[-rmf8v3,]
+
+boxplot(ProjectData39)
+dim(ProjectData39)
+
+######################################
+#Final check for outlier values
+######################################
+
+#Checking all variables for any remaining outliers
+#boxplot(ProjectData39$AF3)
+#boxplot(ProjectData39$F7)
+#boxplot(ProjectData39$F3)
+#boxplot(ProjectData39$FC5)
+#boxplot(ProjectData39$T.)
+#boxplot(ProjectData39$P7)
+#boxplot(ProjectData39$O1)
+#boxplot(ProjectData39$O2)
+#boxplot(ProjectData39$P8)
+#boxplot(ProjectData39$T8)
+#boxplot(ProjectData39$FC6)
+#boxplot(ProjectData39$F4)
+#boxplot(ProjectData39$F8)
+#boxplot(ProjectData39$AF4)
+
+#Outlier check complete. 'ProjectData39' the new data table with 3257 records and 15 rows of outlier free data.
+
+#Write the outlier free dataset into a txt file into working directory
+write.table(ProjectData39, "Group1EyeDetectDataNoOutliers.txt", sep = "\t", row.names = F, col.names = TRUE)
+```
+
+## R Markdown Preprocessing Step 2: Creating 'Train' and 'Test' datasets from 'ProjectData39'
+
+```{r}
+#read Group1EyeDataNoOutliers dataset and attach it 
+OutlierFreeProjectData=read.table("Group1EyeDetectDataNoOutliers.txt", sep = "\t", header = T)
+attach(OutlierFreeProjectData)
+
+#Reading dimensions/summary of OutlierFreeProjectData.Using boxplot to prove this data is outlier free.
+summary(OutlierFreeProjectData)
+boxplot(OutlierFreeProjectData)
+dim(OutlierFreeProjectData)
+#As stated above, this new dataset of outlier free value has 3257 rows of records.
+
+#Creating a function to remove 80% of the values from OutlierFreeProjectData without replacement.80% of 3257 is 2,605.6 (For simplicity, we will round this up to 2,606 and extract this amount).
+RandomRows=sample(1:3257, 2606, replace = FALSE)
+
+#Creating 'Train' dataset by extracting these rows from the OutlierFreeProjectData
+Group1EyeDetectTRAIN=OutlierFreeProjectData[RandomRows, ]
+
+#Creating 'Test' dataset by removing these records from the OutlierFreeProjectData
+Group1EyeDetectTEST=OutlierFreeProjectData[-RandomRows, ]
+
+#Confirming sizes of Train and Test datasets
+dim(Group1EyeDetectTRAIN)
+dim(Group1EyeDetectTEST)
+
+#Writing Train and Test datasets into txt files into working directory
+write.table(Group1EyeDetectTRAIN, "EyeDetect-TRAIN.txt", sep = "\t", row.names = F, col.names = TRUE)
+write.table(Group1EyeDetectTEST, "EyeDetect-TEST.txt", sep = "\t", row.names = F, col.names = TRUE)
+```
+
+## R Markdown Preprocessing Step 3: Applying PCA to 'EyeDetect-TRAIN.txt' dataset
+
+```{r}
+#read Group1EyeDetect-TRAIN dataset and attach it 
+EyeDetectTRAIN=read.table("EyeDetect-TRAIN.txt", sep = "\t", header = T)
+attach(EyeDetectTRAIN)
+
+#head/summary/column names of TRAIN
+head(EyeDetectTRAIN)
+summary(EyeDetectTRAIN)
+colnames(EyeDetectTRAIN)
+
+#Apply PCA to reduce the number of variables that can provide the maximum variabilty in the dataset
+eyePCA=prcomp(EyeDetectTRAIN[,-15], scale. = TRUE, center = TRUE)
+eyePCA
+
+summary(eyePCA)
+
+
+plot(eyePCA,type="l",pch=16)
+#based on cumulative proportion we select 8 principal components
+# we then used r>|.49| and we will select the variables F7, FC5, T, O1, F8
+# using r>|.45| we will select variable T., P7, O1, FC5, F7, FC6, F8
+
+colnames(EyeDetectTRAIN)
+
+#Now we will remove all predictor variables besides the ones we selected in our PCA analysis
+PCAEyeDetectTRAIN <- EyeDetectTRAIN[,-c(1,3,8,9,10,12,14)]
+```
+
+## R Markdown Preprocessing Step 4: Data Descriptions: Numerical Description of Variables
+
+```{r}
+
+head(EyeDetectTRAIN)
+str(EyeDetectTRAIN)
+
+#Let's Provide Numerical Summaries of each of the Variables that remain after PCA. Recall the variables that remain after PCA are T., P7, O1, FC5, F7, FC6, F8
+
+#T.
+summary(T.)
+
+#P7
+summary(P7)
+
+#O1
+summary(O1)
+
+#FC5
+summary(FC5)
+
+#F7
+summary(F7)
+
+#FC6
+summary(FC6)
+
+#F8
+summary(F8)
+
+#Eye Detect
+table(EyeDetectTRAIN$eyeDetect)
+
+
+
+
+```
+
+
+## R Markdown Preprocessing Step 5: Data Descriptions: Visualization of Variables
+
+```{r}
+#Let's Start visualizing each of the Variables that remain after PCA. Recall the variables that remain after PCA are T., P7, O1, FC5, F7, FC6, F8
+
+#In order to visualize the data, we need to first require ggplot2
+require(ggplot2)
+
+#Before we start, lets convert eyeDetect to a factor variable to make it easier to use within the data visualization.
+summary(eyeDetect)
+EyeDetectTRAIN$eyeDetect=as.factor(EyeDetectTRAIN$eyeDetect)
+summary(eyeDetect)
+
+#We will begin the visualization by providing a simple histogram of each variable to get an idea of how they are distributed.
+
+
+#ggplot(Housing, aes(x=Land.Value, y=Home.Value))
+#ggplot(Housing, aes(x=Land.Value, y=Home.Value))+geom_point()
+
+#T.
+ggplot(EyeDetectTRAIN, aes(x=T.))+geom_histogram(col="white", fill="red", bins = 25) + ggtitle("Distrubition of T.")
+
+#P7
+ggplot(EyeDetectTRAIN, aes(x=P7))+geom_histogram(col="white", fill="orange", bins = 25) + ggtitle("Distrubition of P7")
+
+#O1
+ggplot(EyeDetectTRAIN, aes(x=O1))+geom_histogram(col="white", fill="yellow", bins = 25) + ggtitle("Distrubition of O1")
+
+#FC5
+ggplot(EyeDetectTRAIN, aes(x=FC5))+geom_histogram(col="white", fill="green", bins = 25) + ggtitle("Distrubition of FC5")
+
+#F7
+ggplot(EyeDetectTRAIN, aes(x=F7))+geom_histogram(col="white", fill="cyan", bins = 25) + ggtitle("Distrubition of F7")
+
+#FC6
+ggplot(EyeDetectTRAIN, aes(x=FC6))+geom_histogram(col="white", fill="blue", bins = 25) + ggtitle("Distrubition of FC6")
+
+#F8
+ggplot(EyeDetectTRAIN, aes(x=F8))+geom_histogram(col="white", fill="purple", bins = 25) + ggtitle("Distrubition of F8")
+
+#Now let's do a set of multivariate plots. Let's see how the eyeDetect variable changes with each variable through layering of histograms. This will give us an idea of how EyeDetect changes as each of the variables increase or decrease.
+
+#T.
+ggplot(data=EyeDetectTRAIN, aes(x=T., fill=eyeDetect))+geom_histogram() + ggtitle("Distrubition of eyeDetect over T.")
+
+#P7
+ggplot(data=EyeDetectTRAIN, aes(x=P7, fill=eyeDetect))+geom_histogram() + ggtitle("Distrubition of eyeDetect over P7")
+
+#O1
+ggplot(data=EyeDetectTRAIN, aes(x=O1, fill=eyeDetect))+geom_histogram() + ggtitle("Distrubition of eyeDetect over O1")
+
+#FC5
+ggplot(data=EyeDetectTRAIN, aes(x=FC5, fill=eyeDetect))+geom_histogram() + ggtitle("Distrubition of eyeDetect over FC5")
+
+#F7
+ggplot(data=EyeDetectTRAIN, aes(x=F7, fill=eyeDetect))+geom_histogram() + ggtitle("Distrubition of eyeDetect over F7")
+
+#FC6
+ggplot(data=EyeDetectTRAIN, aes(x=FC6, fill=eyeDetect))+geom_histogram() + ggtitle("Distrubition of eyeDetect over FC6")
+
+#F8
+ggplot(data=EyeDetectTRAIN, aes(x=F8, fill=eyeDetect))+geom_histogram() + ggtitle("Distrubition of eyeDetect over F8")
+
+#From these layered histograms, it seems that for some variables, eyeDetect has a more clear relationship with the given variable (P7, O1), while for the others it seems to follow a relatively normally distribution. Let's explore the variables which seem to have a more clear relationship with eyeDetect further. These variables are P7 & O1. Let's get an idea of how the eyedetect variable changes when P7 & O1 are compared to a variable for which eyeDetect is roughly normally distributed (T.).
+
+
+#P7 vs T.
+ggplot(data=EyeDetectTRAIN, aes(y=P7,x=T., col=eyeDetect))+geom_point() + ggtitle("Rate of eyeDetect on P7 vs T.") +
+  xlab("T.") + ylab("P7")
+
+
+#From this chart we can see that as P7 increases (y axis), the rate of eyeDetect decreases (goes from blue to red). Most of the observations where eyeDetect is 1 are focused in the lower to middle values of P7.
+
+#O1 vs T.
+ggplot(data=EyeDetectTRAIN, aes(y=O1,x=T., col=eyeDetect))+geom_point() + ggtitle("Rate of eyeDetect on O1 vs T.") +
+  xlab("T.") + ylab("O1")
+
+#From this chart we can see the relationship between O1 (y axis) and eyeDetect. As O1 nears the lower and upper bounds of its values, eyeDetect is mostly 1 (Blue). As it nears the middle of the distrubtion, an eyeDetect value of 0 (red) becomes the trend.
+
+
+
+
+
+
+```
+
